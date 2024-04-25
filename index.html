@@ -3,23 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connection Guide</title>
+    <title>Connection Guide for Revolution Pi and Cumulocity</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="guide">
-        <h1>Guide to Connecting the Revolution Pi with Cumulocity</h1>
+        <h1>Guide to Connecting the Revolution Pi with Cumulocity Using Thin-edge.io</h1>
         <h2>Table of Contents</h2>
-       
+        <ol>
+            <li>Introduction</li>
+            <li>Powering the Revolution Pi</li>
+            <li>Establishing Network Connection</li>
+            <li>Setting up SSH Access</li>
+            <li>System Updates and Installing Additional Packages</li>
+            <li>Installing Thin-edge.io</li>
+            <li>Configuring Thin-edge.io</li>
+            <li>Creating and Uploading Certificates</li>
+        </ol>
         
         <h3>1. Introduction</h3>
-        <p>This guide provides comprehensive instructions for connecting...</p>
+        <p>This guide provides comprehensive instructions for connecting a Revolution Pi to the Cumulocity IoT platform using thin-edge.io, covering installation, configuration, and data transmission.</p>
 
+        <h3>2. Powering the Revolution Pi</h3>
+        <p>Use either a 24V DIN rail power supply or a 24V plug-in power adapter to power the Revolution Pi. A typical power adapter should be 30W. Make sure the adapter is compatible with a barrel jack pigtail socket with open wire ends for connection.</p>
+
+        <h3>3. Establishing Network Connection</h3>
+        <p>After powering up, connect the Revolution Pi to your network using an Ethernet cable. Access the device by navigating to <code>http://revpi1234.local</code> in a web browser, where <code>1234</code> represents the serial number found on the front of the Revolution Pi.</p>
+
+        <h3>4. Setting up SSH Access</h3>
+        <p>For users on Windows 10/11 and macOS:</p>
         <div class="code-block">
             <pre><code>ssh pi@revpi1234.local</code></pre>
             <button class="copy-btn">Copy</button>
         </div>
-        <!-- Repeat for other sections -->
+        <p>Replace <code>1234</code> with your device's actual serial number. Use the password found on the device's sticker when prompted.</p>
+
+        <h3>5. System Updates and Installing Additional Packages</h3>
+        <p>Once logged in via SSH:</p>
+        <div class="code-block">
+            <pre><code>sudo apt update && sudo apt upgrade</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-block">
+            <pre><code>sudo apt install mqtt-revpi-client opcua-revpi-server</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>6. Installing Thin-edge.io</h3>
+        <div class="code-block">
+            <pre><code>curl -fsSL https://thin-edge.io/install.sh | sh -s</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>7. Configuring Thin-edge.io</h3>
+        <p>Configure the Cumulocity IoT tenant URL:</p>
+        <div class="code-block">
+            <pre><code>sudo tedge config set c8y.url your-tenant.cumulocity.com</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>8. Creating and Uploading Certificates</h3>
+        <div class="code-block">
+            <pre><code>sudo tedge cert create --device-id my-device</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-block">
+            <pre><code>sudo tedge cert upload c8y --user "your_username@example.com"</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>Replace <code>"your_username@example.com"</code> with your actual Cumulocity user account details.</p>
     </div>
 
     <script src="script.js"></script>
