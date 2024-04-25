@@ -9,7 +9,7 @@ body {
 
 h1, h2, h3 {
     font-family: 'Ubuntu', sans-serif; /* Ubuntu font for headlines */
-    color: #FFD700; /* Gold color for headings */
+    color: #cccccc; /* Light gray color for headings */
 }
 
 .code-block {
@@ -34,11 +34,11 @@ code {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #FFD700; /* Gold background for the button */
+    background-color: #cccccc; /* Light gray background for the button */
     color: #333333; /* Dark text on button */
     font-weight: bold;
 }
 
 .copy-btn:hover {
-    background-color: #FFC107; /* Lighter gold on hover */
+    background-color: #aaaaaa; /* Slightly darker gray on hover */
 }
