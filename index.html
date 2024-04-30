@@ -34,7 +34,7 @@
                     <li><a href="#check-tedge">Check if measurement was received</a></li>
                 </ol>
             </li>
-            <li><a href="#sending-data">Sending Data to the Thin-Edge connector</a>
+            <li><a href="#sending-data">Sending revpi's IO Data to the Thin-Edge connector</a>
                 <ol>
                     <li><a href="#accessing-revpi-interface">Accessing Revpi's admin interface</a></li>
                     <li><a href="#configuring-ios">Configure IOs and Fieldbus Data on the Revolution Pi Using Pictory</a></li>
@@ -173,7 +173,7 @@
         <p>You can log into your Cumulocity account and navigate to the 'Device Management' section to view the 'Measurements' tab for your device.</p>
 
 
-    <h2>Sync RevPi's process image with Thin-Edge</h2>
+    <h2 id="sending-data">Sending revpi's IO Data to the Thin-Edge connector</h2>
     <p>Like PLCs, Revolution Pi has a process image. That's a central space where all values from IOs and connected fieldbus devices are stored. The process image helps you to have a single source of truth for all IO data and a single point, all the software you are using can connect to. The web tool Pictory provided on the admin website of your RevPi allows you to configure the process image and provide names for your IOs. It also offers No-Code connectors for MQTT, OPC-UA, MODBUS and more.</p>
 
     <h3 id="admin-interface">Accessing Revpi's admin interface</h3>
