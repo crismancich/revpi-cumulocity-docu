@@ -107,10 +107,10 @@
         <h3>4. Setting up SSH Access</h3>
         <p>For users on Windows 10/11 and macOS:</p>
         <div class="code-block">
-            <pre><code>ssh pi@revpi1234.local</code></pre>
+            <pre><code>ssh pi@revpi&lt;SERIAL-NUMBER&gt;.local</code></pre>
             <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
         </div>
-        <p>Replace <code>1234</code> with your device's actual serial number. Use the password found on the device's sticker when prompted.</p>
+        <p>Replace SERIAL-NUMBER with your device's serial number. The serial number is the middle number on the front of your RevPi. Use the password found on the sticker from the right side of the device when prompted.</p>
 
         <h3>5. System Updates and Installing Additional Packages</h3>
         <p>Once logged in via SSH:</p>
@@ -135,19 +135,40 @@
             <pre><code>sudo tedge config set c8y.url your-tenant.cumulocity.com</code></pre>
             <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
         </div>
-
+        <p>If you don't have a cumulocity account yet, you can go to the cumulocity website and register a demo account.</p>
         <h3>8. Creating and Uploading Certificates</h3>
+        <p>Your device will authenticate with the cloud using a certificate. You have to create and upload a certificate for each device.</p>
         <div class="code-block">
-            <pre><code>sudo tedge cert create --device-id my-device</code></pre>
+            <pre><code>sudo tedge cert create --device-id revpi&lt;SERIAL-NUMBER&gt;</code></pre>
             <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
         </div>
+        <p>Replace SERIAL-NUMBER with your device's serial number.</p>
         <div class="code-block">
             <pre><code>sudo tedge cert upload c8y --user "your_username@example.com"</code></pre>
             <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
         </div>
-        <p>Replace <code>"your_username@example.com"</code> with your actual Cumulocity user account details.</p>
+        <p>Replace <code>"your_username@example.com"</code> with your actual Cumulocity user account detaiLS. If you get an error message 403 forbidden, please go to cumulocity's user management and add the role tenant admin.</p>
     
-    
+        <h3>8. Starting the Thin-edge.io Client</h3>
+        <p>Start the tedge client to ensure it can connect to Cumulocity:</p>
+        <div class="code-block">
+            <pre><code>sudo tedge connect c8y</code></pre>
+            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+        </div>
+        <p>This command will start the tedge client and establish a connection to the Cumulocity cloud using MQTT.</p>
+
+        <h3>9. Sending Measurement Values</h3>
+        <p>Send a test measurement to Cumulocity to verify connectivity:</p>
+        <div class="code-block">
+            <pre><code>tedge mqtt pub 'c8y/s/us' '211,100'</code></pre>
+            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+        </div>
+        <p>This command sends a temperature measurement (type 211) with a value of 100 to Cumulocity.</p>
+
+        <h3>10. Verifying Data Reception</h3>
+        <p>Verify that the measurement has been received by checking in the Cumulocity UI:</p>
+        <p>You can log into your Cumulocity account and navigate to the 'Device Management' section to view the 'Measurements' tab for your device.</p>
+
 
     <h3>Accessing Revpi's admin interface</h3>
     <p>Navigate to the RevPi's web interface by entering the following URL in a browser, replacing <code>&lt;serial&gt;</code> with the device's serial number:</p>
