@@ -116,7 +116,8 @@
                 <div class="code-block">
                     <pre><code>sudo apt install mqtt-revpi-client opcua-revpi-server</code></pre>
                     <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-                    </div><p><strong>Explanation:</strong> Installs the packages for No-Code OPC-UA and MQTT support.</p>
+                </div>
+                <p><strong>Explanation:</strong> Installs the packages for No-Code OPC-UA and MQTT support.</p>
                 
             </section>
             <section id="cumuzlocity-client">
@@ -168,7 +169,13 @@
                 <h3 id="check-tedge">Verifying Data Reception</h3>
                 <p>Verify that the measurement has been received by checking in the Cumulocity UI:</p>
                 <p>You can log into your Cumulocity account and navigate to the 'Device Management' section to view the 'Measurements' tab for your device.</p>
-    
+                <p>Now reboot your revolution pi ,so taht the installed packages all get loaded.</p>
+                <div class="code-block">
+                    <pre><code>sudo reboot</code></pre>
+                    <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                </div>
+                
+
             </section>
             <section id="revpi-data">
                 <h2 id="sending-data">Sending RevPi's IO Data to the Thin-Edge connector</h2>
