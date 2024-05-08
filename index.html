@@ -13,213 +13,208 @@
         <h1>Guide to Connecting the Revolution Pi with Cumulocity Using Thin-edge.io</h1>
         <h2>Table of Contents</h2>
 
-        <ol> 
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#wiring">Wiring and powering up</a></li>
-            <li><a href="#updating-preparing">Updating and Preparing Your RevPi</a>
-                <ol>
-                    <li><a href="#powering-revpi">Powering the Revolution Pi</a></li>
-                    <li><a href="#establishing-connection">Establishing Network Connection</a></li>
-                    <li><a href="#ssh-access">Setting up SSH Access</a></li>
-                    <li><a href="#system-updates">System Updates and Installing Additional Packages</a></li>
-                </ol>
-            </li>
-            <li><a href="#installing-thin-edge">Installing the Cumulocity Connector Thin-Edge.io</a>
-                <ol>
-                    <li><a href="#installing-thin-edge">Installing Thin-edge.io</a></li>
-                    <li><a href="#configuring-thin-edge">Configuring Thin-edge.io</a></li>
-                    <li><a href="#create-cert">Creating and Uploading Certificates</a></li>
-                    <li><a href="#start-tedge">Starting the client</a></li>
-                    <li><a href="#send-measurement">Sending a test measurement</a></li>
-                    <li><a href="#check-tedge">Check if measurement was received</a></li>
-                </ol>
-            </li>
-            <li><a href="#sending-data">Sending revpi's IO Data to the Thin-Edge connector</a>
-                <ol>
-                    <li><a href="#accessing-revpi-interface">Accessing Revpi's admin interface</a></li>
-                    <li><a href="#configuring-ios">Configure IOs and Fieldbus Data on the Revolution Pi Using Pictory</a></li>
-                    <li><a href="#sending-values">Send Connected Values to the Thin-edge Client</a></li>
-                    <li><a href="#adding-fieldbusses">Adding Data from EtherCAT, Ethernet IP, Profinet</a></li>
-                </ol>
-            </li>
-        </ol>
+        <h2>Introduction</h2>
+        <p>This guide provides comprehensive instructions for connecting a Revolution Pi to the Cumulocity IoT platform using Thin-Edge.io, covering installation, configuration, and data transmission.</p>
         
-        <section id="introduction">
-            <h3>Introduction</h3>
-            <p>This guide provides comprehensive instructions for connecting a Revolution Pi to the Cumulocity IoT platform using Thin-Edge.io, covering installation, configuration, and data transmission.</p>
-        </section>
+        <div class="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#revpi-setup">Setting Up Your Revolution Pi</a>
+                    <ul>
+                        <li><a href="#wiring">Wiring and Power Connection</a></li>
+                        <li><a href="#ssh">Setting Up SSH Access</a></li>
+                        <li><a href="#updates">System Updates and Installing Additional Packages</a></li>
+                    </ul>
+                </li>
+                <li><a href="#cumulocity-client">Installing and Configuring the Cumulocity Client</a>
+                    <ul>
+                        <li><a href="#create-certs">Creating and Uploading Certificates</a></li>
+                        <li><a href="#start-tedge">Starting the Thin-edge.io Client</a></li>
+                        <li><a href="#send-measurement">Testing - Sending Measurement Values</a></li>
+                        <li><a href="#check-tedge">Verifying Data Reception</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sending-data">Sending RevPi's IO Data to the Thin-Edge Connector</a>
+                    <ul>
+                        <li><a href="#admin-interface">Accessing RevPi's Admin Interface</a></li>
+                        <li><a href="#configure-ios">Configure IOs and Fieldbus Data on the Revolution Pi</a></li>
+                        <li><a href="#send-values">Send Connected Values to the Thin-edge Client</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <section id="revpi-setup">
+
+            <h2>Setting up your Revolution Pi</h2>
+            
+            <section id="wiring">
+                <h3>Wiring & Power Connection</h3>
+                <p>Use either a <a href="https://www.amazon.com/s?k=24V+DIN+rail+power+supply&crid=1N0CKS5KTR1JT&sprefix=24v+din+rail+power+supply%2Caps%2C249&ref=nb_sb_noss_1"> 24V DC DIN rail power supply</a> or for desktop use, use a <a href="https://www.amazon.com/s?k=24V+DC+30W+plug-in+power+adapter&crid=X0CNIC6WNPQE&sprefix=24v+dc+30w+plug-in+power+adapter%2Caps%2C476&ref=nb_sb_noss">24V DC plug-in power adapter</a> to power the Revolution Pi. A typical power adapter should have at least 30W. Use a <a href="https://www.amazon.com/s?k=barrel+pigtail+connector+female+open+wire+ends&crid=11GQLQQMV6SPK&sprefix=barrel+pigtail+connector+female+open+wire+ends+%2Caps%2C213&ref=nb_sb_noss">barrel jack pigtail connector with open wire ends</a> to connect it to the RevPi.</p>
+                <h3>Establishing Network Connection</h3>
+                <p>After powering up, connect the Revolution Pi to your network using an Ethernet cable. Access the device by navigating to <code>http://revpi1234.local</code> in a web browser, where <code>1234</code> represents the serial number found on the front of the Revolution Pi.</p>
+            </section>
+                
+            <section id="ssh">
+                <h3>Setting up SSH Access</h3>
+                <h4>For macOS Users</h4>
+                <p>To connect to your device via SSH on macOS, follow these steps:</p>
+                <ol>
+                    <li>Open the Terminal application. You can find it in Applications > Utilities > Terminal.</li>
+                    <li>Type the following command and press Enter:
+                        <div class="code-block">
+                            <pre><code>ssh pi@revpi&lt;SERIAL-NUMBER&gt;.local</code></pre>
+                            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                        </div>
+                    </li>
+                    <li>Replace &lt;SERIAL-NUMBER&gt; with the actual serial number of your device. This is usually found on the front of your RevPi device.</li>
+                    <li>When prompted, enter the password provided on the sticker located on the right side of your device.</li>
+                </ol>
+                <p>Ensure your macOS and the device are on the same network to facilitate the connection.</p>
+                <h4>For Windows 7/10/11 Users</h4>
+                <p>Windows users will need to ensure they have an SSH client installed. Windows 10 and 11 have a built-in SSH client in Command Prompt or PowerShell, while Windows 7 users may need to install one, such as PuTTY.</p>
+                <ol>
+                    <li>For Windows 10/11:
+                        <ol type="a">
+                            <li>Open Command Prompt or PowerShell.</li>
+                            <li>Type the following command and press Enter:
+                                <div class="code-block">
+                                    <pre><code>ssh pi@revpi&lt;SERIAL-NUMBER&gt;.local</code></pre>
+                                    <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                                </div>
+                            </li>
+                        </ol>
+                    </li>
+                    <li>For Windows 7:
+                        <ol type="a">
+                            <li>Download and install PuTTY from <a href="https://www.putty.org/">https://www.putty.org/</a>.</li>
+                            <li>Open PuTTY and enter <code>revpi&lt;SERIAL-NUMBER&gt;.local</code> in the 'Host Name' field.</li>
+                            <li>Ensure the connection type is set to SSH.</li>
+                            <li>Click 'Open' to initiate the connection.</li>
+                        </ol>
+                    </li>
+                    <li>In both cases, replace &lt;SERIAL-NUMBER&gt; with your device's serial number, as found on the device.</li>
+                    <li>When prompted, use the password located on the sticker on the right side of your device.</li>
+                </ol>
+                <p>Make sure your computer and the device are connected to the same network.</p>
+            </section>
+            <section id="updates">
+                <h3>System Updates and Installing Additional Packages</h3>
+                <p>Once logged in via SSH:</p>
+                <div class="code-block">
+                    <pre><code>sudo apt update && sudo apt upgrade && sudo apt dist-upgrade</code></pre>
+                    <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    <p><strong>Explanation:</strong> This command sequence updates the list of available packages, upgrades all installed packages to their latest versions, and then performs a distribution upgrade.</p>
+                    <p><strong>Estimated Duration:</strong> The total time can vary significantly based on your system’s internet speed, the number of updates, and the Revolution Pi model. It some cases it can take more than 15 minutes.</p>
+                </div>
+                
+                <div class="code-block">
+                    <pre><code>sudo apt install mqtt-revpi-client opcua-revpi-server</code></pre>
+                    <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    <p><strong>Explanation:</strong> Installs the packages for No-Code OPC-UA and MQTT support.</p>
+                </div>
+            </section>
+            <section id="cumuzlocity-client">
 
 
-        <section id="wiring">
-            <h3>Wiring up your RevPi</h3>
-            <ol>
-                <li>
-                    <h4 id="powering-revpi">Powering the Revolution Pi</h4>
-                    <p>Use either a 24V DIN rail power supply or a 24V plug-in power adapter to power the Revolution Pi. A typical power adapter should be 30W. Make sure the adapter is compatible with a barrel jack pigtail socket with open wire ends for connection.</p>
-                </li>
-            </ol>
-        </section>
-
-        <section id="updating-preparing">
-            <h3>Updating and Preparing Your RevPi</h3>
-            <ol>
-                <li>
-                    <h4 id="powering-revpi">Powering the Revolution Pi</h4>
-                    <p>For switch cabinets use a <a href="https://www.amazon.com/s?k=24V+DIN+rail+power+supply&crid=1N0CKS5KTR1JT&sprefix=24v+din+rail+power+supply%2Caps%2C249&ref=nb_sb_noss_1">24V DC DIN rail power supply</a> or for desktop use a <a href="https://www.amazon.com/s?k=24V+DC+30W+plug-in+power+adapter&crid=X0CNIC6WNPQE&sprefix=24v+dc+30w+plug-in+power+adapter%2Caps%2C476&ref=nb_sb_noss">24V DC 30W+ plug-in power adapter</a> to power the Revolution Pi. For the plug-in adapter you will require also a <a href="https://www.amazon.com/s?k=barrel+pigtail+connector+female+open+wire+ends&crid=11GQLQQMV6SPK&sprefix=barrel+pigtail+connector+female+open+wire+ends+%2Caps%2C213&ref=nb_sb_noss">a barrel jack pigtail connector with open wire ends</a> for connection.</p>
-                </li>
-                <li>
-                    <h4 id="establishing-connection">Establishing Network Connection</h4>
-                    <p>After powering up, connect the Revolution Pi to your network using an Ethernet cable. Access the device by navigating to <code>http://revpi1234.local</code> in a web browser, where <code>1234</code> represents the serial number found on the front of the Revolution Pi.</p>
-                </li>
-                <li>
-                    <h4 id="ssh-access">Setting up SSH Access</h4>
-                    <p>For users on Windows 10/11 and macOS:</p>
+                <h2>Installing and configuring the cumulocity client</h3>
+                    <h3>Download and install the Thin-Edge.io client</h3>
                     <div class="code-block">
-                        <pre><code>ssh pi@revpi&lt;SERIAL-NUMBER&gt;.local</code></pre>
+                        <pre><code>curl -fsSL https://thin-edge.io/install.sh | sh -s</code></pre>
                         <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
                     </div>
-                    <p>Replace <code>SERIAL-NUMBER</code> with your device's serial number. It is the middle number lasrered on the front of the device. Use the password found on the device's sticker when prompted.</p>
+        
+                    <h3>Configuring Thin-edge.io</h3>
+                    <p>Configure the Cumulocity IoT tenant URL:</p>
+                    <div class="code-block">
+                        <pre><code>sudo tedge config set c8y.url your-tenant.cumulocity.com</code></pre>
+                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    </div>
+                    <p>Replace your-tenant.cumulocity.com with your actual tenant link without the https. aIf you don't have a cumulocity account yet, you can go to the cumulocity website and register a demo account.</p>
                     
-                    <div class="info-box">
-                        <h3>Can't connect?</h3>
-                        <p>Older firmware versions can't be reached via .local. In this case use an IP scanner or ask you IT for the IP of the device. After the update we will perform in the next steps and a reboot, your RevPi should be available under the .local address.</p></div>
-                   
+                    <h3 id="create-certs">Creating and Uploading Certificates</h3>
+                    <p>Your device will authenticate with the cloud using a certificate. You have to create and upload a certificate for each device.</p>
+                    <div class="code-block">
+                        <pre><code>sudo tedge cert create --device-id revpi&lt;SERIAL-NUMBER&gt;</code></pre>
+                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    </div>
+                    <p>Replace SERIAL-NUMBER with your device's serial number.</p>
+                    <div class="code-block">
+                        <pre><code>sudo tedge cert upload c8y --user "your_username@example.com"</code></pre>
+                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    </div>
+                    <p>Replace <code>"your_username@example.com"</code> with your actual Cumulocity user account detaiLS. If you get an error message 403 forbidden, please go to cumulocity's user management and add the role tenant admin.</p>
+                
+                    <h3 id="start-tedge">Starting the Thin-edge.io Client</h3>
+                    <p>Start the tedge client to ensure it can connect to Cumulocity:</p>
+                    <div class="code-block">
+                        <pre><code>sudo tedge connect c8y</code></pre>
+                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    </div>
+                    <p>This command will start the tedge client and establish a connection to the Cumulocity cloud using MQTT.</p>
+        
+                    <h3 id="send-measurement">Testing - Sending Measurement Values</h3>
+                    <p>Send a test measurement to Cumulocity to verify connectivity:</p>
+                    <div class="code-block">
+                        <pre><code>tedge mqtt pub 'c8y/s/us' '211,100'</code></pre>
+                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
+                    </div>
+                    <p>This command sends a temperature measurement (type 211) with a value of 100 to Cumulocity.</p>
+        
+                    <h3 id="check-tedge">Verifying Data Reception</h3>
+                    <p>Verify that the measurement has been received by checking in the Cumulocity UI:</p>
+                    <p>You can log into your Cumulocity account and navigate to the 'Device Management' section to view the 'Measurements' tab for your device.</p>
+        
+            </section>
+            <section id="revpi-data">
+                <h2 id="sending-data">Sending RevPi's IO Data to the Thin-Edge connector</h2>
+                <p>Like PLCs, Revolution Pi has a process image. That's a central space where all values from IOs and connected fieldbus devices are stored. The process image helps you to have a single source of truth for all IO data and a single point, all the software you are using can connect to. The web tool Pictory provided on the admin website of your RevPi allows you to configure the process image and provide names for your IOs. It also offers No-Code connectors for MQTT, OPC-UA, MODBUS and more.</p>
 
-                </li>
-                <li><h4 id="system-updates">System Updates and Installing Additional Packages</h4>
-                    <p>Once logged in via SSH:</p>
-                    <div class="code-block">
-                        <pre><code>sudo apt update && sudo apt upgrade</code></pre>
-                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-                    </div>
-                    <div class="code-block">
-                        <pre><code>sudo apt install mqtt-revpi-client</code></pre>
-                        <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-                    </div>
-                </li>
-            </ol>
+                <h3 id="admin-interface">Accessing Revpi's admin interface</h3>
+                <p>Navigate to the RevPi's web interface by entering the following URL in a browser, replacing <code>&lt;serial&gt;</code> with the device's serial number:</p>
+                <pre><code>http://revpi&lt;serial&gt;.local</code></pre>
+                <p>Upon accessing the URL, a security warning may appear due to the use of an HTTP connection. This section explains how to proceed safely.</p>
+                
+                <p>There will be a security warning.</p>
+                <p><strong>In Firefox:</strong> Click 'Advanced...', then select 'Accept the Risk and Continue' to proceed to the website.</p>
+                <p><strong>In Chrome:</strong> Click 'Advanced' and then choose 'Proceed to revpi&lt;serial&gt;.local (unsafe)' to access the site.</p>
+
+                
+                <div class="info-box">
+                    <h3>Why is there a warning?</h3>
+                    <p>The warning comes, becuase for HTTPS encryption the customer has to create an own SSL/TLS certificate. As this has not been done yet, the system is showing the message. As long as the RevPi is in a local network, this is okay but it can be changed by your IT by providing certificates.</p>
+                </div>
+
+                <h3 id="configure-ios">Configure IOs and Fieldbus Data on the Revolution Pi Using Pictory</h3>
+                
+                <p>This steps enable your Revolution Pi to interact with a variety of sensors and actuators through configured IO modules.</p>
+                
+                <p>To configure analog or digital IOs on your Revolution Pi, start by logging into the admin web interface. Use the username <code>admin</code> and the password found on the sticker on the right side of your Revolution Pi.</p>
+                
+                <ol>
+                    <li>After logging in, click the 'Start Pictory' button to launch the Pictory graphical editor.</li>
+                    <li>In the Pictory editor, you will see a graphical representation of your Revolution Pi. On the left, there is a panel with various devices such as Analog IO (AIO), Digital IO (DIO), and virtual devices for fieldbusses like Modbus TCP.</li>
+                    <li>Drag and drop the desired devices (AIO, DIO, or fieldbus modules) from the panel to your Revolution Pi diagram to add them.</li>
+                    <li>Click on the newly added AIO or DIO on your diagram to configure their settings. Here, you can rename the inputs and outputs and check the 'Export' checkbox if the data should be sent to Cumulocity.</li>
+                    <li>For fieldbusses like Modbus TCP, add them as virtual devices and configure as necessary for your network setup.</li>
+                </ol>
+                
+
+                <h3 id="send-values">Send Connected Values to the Thin-edge Client</h3>
+                <p>The Cumulocity client, thin-edge, facilitates communication with Cumulocity IoT via MQTT. This integration includes an MQTT broker as part of thin-edge. Follow the steps below to set up the MQTT client that sends data from the Revolution Pi to the thin-edge MQTT broker.</p>
+                
+                <ol>
+                    <li>Within the Pictory graphical editor, drag the virtual device labeled 'MQTT' to the right side of your Revolution Pi.</li>
+                    <li>Click on the MQTT device in your diagram to open its settings dialog.</li>
+                    <li>Set the server to "localhost" to ensure the MQTT client communicates with the local MQTT broker provided by thin-edge. Keep all other settings at their default values.</li>
+                    <li>Save your configurations with "Save as start config" then click "reset driver" to ensure all settings are applied and active.</li>
+                
+                </ol>
+                <p>Now all vlaue on the Revolution Pi with an active export checkbox will be transmitted to Cumulocity and will be visible in the device telemetry.</p>
+            </section>
         </section>
-        
-        
-        <h3>Powering the Revolution Pi</h3>
-        <p>Use either a <a href="https://www.amazon.com/s?k=24V+DIN+rail+power+supply&crid=1N0CKS5KTR1JT&sprefix=24v+din+rail+power+supply%2Caps%2C249&ref=nb_sb_noss_1"> 24V DC DIN rail power supply</a> or for desktop use, use a <a href="https://www.amazon.com/s?k=24V+DC+30W+plug-in+power+adapter&crid=X0CNIC6WNPQE&sprefix=24v+dc+30w+plug-in+power+adapter%2Caps%2C476&ref=nb_sb_noss">24V DC plug-in power adapter</a> to power the Revolution Pi. A typical power adapter should have at least 30W. Use a <a href="https://www.amazon.com/s?k=barrel+pigtail+connector+female+open+wire+ends&crid=11GQLQQMV6SPK&sprefix=barrel+pigtail+connector+female+open+wire+ends+%2Caps%2C213&ref=nb_sb_noss">barrel jack pigtail connector with open wire ends</a> to connect it to the RevPi.</p>
-
-        <h3>Establishing Network Connection</h3>
-        <p>After powering up, connect the Revolution Pi to your network using an Ethernet cable. Access the device by navigating to <code>http://revpi1234.local</code> in a web browser, where <code>1234</code> represents the serial number found on the front of the Revolution Pi.</p>
-
-        <h3>Setting up SSH Access</h3>
-        <p>For users on Windows 10/11 and macOS:</p>
-        <div class="code-block">
-            <pre><code>ssh pi@revpi&lt;SERIAL-NUMBER&gt;.local</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>Replace SERIAL-NUMBER with your device's serial number. The serial number is the middle number on the front of your RevPi. Use the password found on the sticker from the right side of the device when prompted.</p>
-
-        <h3>System Updates and Installing Additional Packages</h3>
-        <p>Once logged in via SSH:</p>
-        <div class="code-block">
-            <pre><code>sudo apt update && sudo apt upgrade</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <div class="code-block">
-            <pre><code>sudo apt install mqtt-revpi-client opcua-revpi-server</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-
-        <h3>Installing Thin-edge.io</h3>
-        <div class="code-block">
-            <pre><code>curl -fsSL https://thin-edge.io/install.sh | sh -s</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-
-        <h3>Configuring Thin-edge.io</h3>
-        <p>Configure the Cumulocity IoT tenant URL:</p>
-        <div class="code-block">
-            <pre><code>sudo tedge config set c8y.url your-tenant.cumulocity.com</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>Replace your-tenant.cumulocity.com with your actual tenant link without the https. If you don't have a cumulocity account yet, you can go to the cumulocity website and register a demo account.</p>
-        <h3 id="create-certs">Creating and Uploading Certificates</h3>
-        <p>Your device will authenticate with the cloud using a certificate. You have to create and upload a certificate for each device.</p>
-        <div class="code-block">
-            <pre><code>sudo tedge cert create --device-id revpi&lt;SERIAL-NUMBER&gt;</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>Replace SERIAL-NUMBER with your device's serial number.</p>
-        <div class="code-block">
-            <pre><code>sudo tedge cert upload c8y --user "your_username@example.com"</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>Replace <code>"your_username@example.com"</code> with your actual Cumulocity user account detaiLS. If you get an error message 403 forbidden, please go to cumulocity's user management and add the role tenant admin.</p>
-    
-        <h3 id="start-tedge">Starting the Thin-edge.io Client</h3>
-        <p>Start the tedge client to ensure it can connect to Cumulocity:</p>
-        <div class="code-block">
-            <pre><code>sudo tedge connect c8y</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>This command will start the tedge client and establish a connection to the Cumulocity cloud using MQTT.</p>
-
-        <h3 id="send-measurement">Sending Measurement Values</h3>
-        <p>Send a test measurement to Cumulocity to verify connectivity:</p>
-        <div class="code-block">
-            <pre><code>tedge mqtt pub 'c8y/s/us' '211,100'</code></pre>
-            <button class="copy-btn"><i class="fa fa-copy"></i> Copy</button>
-        </div>
-        <p>This command sends a temperature measurement (type 211) with a value of 100 to Cumulocity.</p>
-
-        <h3 id="check-tedge">Verifying Data Reception</h3>
-        <p>Verify that the measurement has been received by checking in the Cumulocity UI:</p>
-        <p>You can log into your Cumulocity account and navigate to the 'Device Management' section to view the 'Measurements' tab for your device.</p>
-
-
-    <h2 id="sending-data">Sending revpi's IO Data to the Thin-Edge connector</h2>
-    <p>Like PLCs, Revolution Pi has a process image. That's a central space where all values from IOs and connected fieldbus devices are stored. The process image helps you to have a single source of truth for all IO data and a single point, all the software you are using can connect to. The web tool Pictory provided on the admin website of your RevPi allows you to configure the process image and provide names for your IOs. It also offers No-Code connectors for MQTT, OPC-UA, MODBUS and more.</p>
-
-    <h3 id="admin-interface">Accessing Revpi's admin interface</h3>
-    <p>Navigate to the RevPi's web interface by entering the following URL in a browser, replacing <code>&lt;serial&gt;</code> with the device's serial number:</p>
-    <pre><code>http://revpi&lt;serial&gt;.local</code></pre>
-    <p>Upon accessing the URL, a security warning may appear due to the use of an HTTP connection. This section explains how to proceed safely.</p>
-    
-    <p>There will be a security warning.</p>
-    <p><strong>In Firefox:</strong> Click 'Advanced...', then select 'Accept the Risk and Continue' to proceed to the website.</p>
-    <p><strong>In Chrome:</strong> Click 'Advanced' and then choose 'Proceed to revpi&lt;serial&gt;.local (unsafe)' to access the site.</p>
-
-    
-    <div class="info-box">
-        <h3>Why is there a warning?</h3>
-        <p>The warning comes, becuase for HTTPS encryption the customer has to create an own SSL/TLS certificate. As this has not been done yet, the system is showing the message. As long as the RevPi is in a local network, this is okay but it can be changed by your IT by providing certificates.</p></div>
     </div>
-
-
- 
-        <h3>Configure IOs and Fieldbus Data on the Revolution Pi Using Pictory</h3>
-        
-        <p>This steps enable your Revolution Pi to interact with a variety of sensors and actuators through configured IO modules.</p>
-        
-        <p>To configure analog or digital IOs on your Revolution Pi, start by logging into the admin web interface. Use the username <code>admin</code> and the password found on the sticker on the right side of your Revolution Pi.</p>
-        
-        <ol>
-            <li>After logging in, click the 'Start Pictory' button to launch the Pictory graphical editor.</li>
-            <li>In the Pictory editor, you will see a graphical representation of your Revolution Pi. On the left, there is a panel with various devices such as Analog IO (AIO), Digital IO (DIO), and virtual devices for fieldbusses like Modbus TCP.</li>
-            <li>Drag and drop the desired devices (AIO, DIO, or fieldbus modules) from the panel to your Revolution Pi diagram to add them.</li>
-            <li>Click on the newly added AIO or DIO on your diagram to configure their settings. Here, you can rename the inputs and outputs and check the 'Export' checkbox if the data should be sent to Cumulocity.</li>
-            <li>For fieldbusses like Modbus TCP, add them as virtual devices and configure as necessary for your network setup.</li>
-        </ol>
-        
-
-        <h3>Send Connected Values to the Thin-edge Client</h3>
-        <p>The Cumulocity client, thin-edge, facilitates communication with Cumulocity IoT via MQTT. This integration includes an MQTT broker as part of thin-edge. Follow the steps below to set up the MQTT client that sends data from the Revolution Pi to the thin-edge MQTT broker.</p>
-        
-        <ol>
-            <li>Within the Pictory graphical editor, drag the virtual device labeled 'MQTT' to the right side of your Revolution Pi.</li>
-            <li>Click on the MQTT device in your diagram to open its settings dialog.</li>
-            <li>Set the server to "localhost" to ensure the MQTT client communicates with the local MQTT broker provided by thin-edge. Keep all other settings at their default values.</li>
-            <li>Save your configurations with "Save as start config" then click "reset driver" to ensure all settings are applied and active.</li>
-        
-        </ol>
-        <p>Now all vlaue on the Revolution Pi with an active export checkbox will be transmitted to Cumulocity and will be visible in the device telemetry.</p>
-
     <script src="script.js"></script>
 </body>
 </html>
