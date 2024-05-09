@@ -213,7 +213,8 @@
 
                 <h3 id="send-values">Send Connected Values to the Thin-edge Client</h3>
                 <p>The Cumulocity client, thin-edge, facilitates communication with Cumulocity IoT via MQTT. This integration includes an MQTT broker as part of thin-edge. Follow the steps below to set up the MQTT client that sends data from the Revolution Pi to the thin-edge MQTT broker.</p>
-                
+                <h4>Option 1: No-code with Pictory</h4>
+                <p>The Revolution Pi admin tool pictory is capable of sending values from RevPi to Cumulocity in fixed intervals.</p>
                 <ol>
                     <li>Within the Pictory graphical editor, drag the virtual device labeled 'MQTT' to the right side of your Revolution Pi.</li>
                     <li>Click on the MQTT device in your diagram to open its settings dialog.</li>
@@ -223,7 +224,40 @@
                 </ol>
                 <p>Now all vlaue on the Revolution Pi with an active export checkbox will be transmitted to Cumulocity and will be visible in the device telemetry.</p>
                 <p>For this you might need an updated versionb of Pictory toop make sure Meaurements are send as JSON. Otherwise they will be sent but don't show up in the measurements in cumulocity.</p>
+                <h4>Option 2: NodeRed</h4>
+                <p>You can use NodeRed on the Revolution Pi to send values to thin-edge's local mosquitto broker. Therefore use an MQTT node and configure it to localhost.
+                    Make sure you send you values as JSON in the format described in the Thin-Edge documentation section "Sending measurements".
+                </p>
+                <h4>Option 3: Codesys</h4>
+                <p>
+                    If your background is PLC programming, you might like to install and use Codesys. Codesys helps you to program structured text, ladder diagrams and function blocks. It also has an MQTT client that you can use to send Measurements and Alarms.
+                </p>
+                <h4>Option 4: Python</h4>
+                <p>
+                    If you like to program in python, you can use the RevPiModIo2 Library to interact with Revolution Pi IOs and python libraries for MQTT to send them to This-Edge's local MQTT broker.
+                </p>
+                
             </section>
+
+
+            
+            <section id="cumulocity-features">
+                <h3>Activate all cumulocity features</h3>
+                <p>Revolution is capable of using all device features Cumulocity has to offer.</p>
+                <ul>
+                    <li>Measurements</li>
+                    <li>Warnings / Alarms</li>
+                    <li>Configuration Management</li>
+                    <li>Software Management</li>
+                    <li>Logfile retrieval</li>
+                    <li>Remote Actions</li>
+                    <li>Container Management</li>
+                    <li>Remote Access via SSH</li>
+                    <li>Remote Access via VNC</li>
+                </ul>
+                <p>Please refer to the Cumulocity team on how to configure this.</p>
+            </section>
+
         </section>
     </div>
     <script src="script.js"></script>
